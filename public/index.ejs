@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <link rel="icon" href="<%= require('@/assets/favicon.svg') %>" />
+  <title>EternalAgency</title>
+</head>
+
+<body>
+  <%= "<style>" %>
+  <%= 
+    process.env.NODE_ENV==='production' ?
+      require(`!raw-loader!`+process.env.VUE_APP_OPTIMIZE_CSS_LOADERS_PACK+`sass-loader!@/extensions/main.scss`).default
+      : require(`!raw-loader!sass-loader!@/extensions/main.scss`).default
+  %>
+  <%= "</style>" %>
+
+  <noscript>
+    <% noscriptStyles = process.env.NODE_ENV==='production' ?
+          require(`!raw-loader!`+process.env.VUE_APP_OPTIMIZE_CSS_LOADERS_PACK+`sass-loader!@/extensions/sites/noscript/noscript.scss`).default :
+          require(`!raw-loader!sass-loader!@/extensions/sites/noscript/noscript.scss`).default %>
+    <%=
+    EXTRACT_STYLES_TO_LINK(
+      MINIFY_IDS_AND_CLASS_NAMES(
+        require(`@/extensions/sites/noscript/noscript.ejs`)() + "<style>"+noscriptStyles+"</style>"
+      )
+    )
+  %>
+  </noscript>
+
+  <div id="app">
+  </div>
+</body>
+
+
+</html>
